@@ -69,17 +69,20 @@ bot.on("message", async (message) => {
     async function checkLink() {
       await axios
         .get(`${url}/check?url=${checkArgs}`)
-        .then(function (response) {
-          let originalLink = response.data.url;
-          let shortedLink = response.data.shorturl;
+        .then(function (response, err) {
+          if (err) {
+            return;
+          } else {
+            let originalLink = response.data.url;
+            let shortedLink = response.data.shorturl;
 
-          return message.channel.send(
-            `Du har angivet: ${checkArgs} \nForkortet link: ${shortedLink} \nOriginal link er: ${originalLink}`
-          );
+            return message.channel.send(
+              `Du har angivet: <${checkArgs}> \nForkortet link: <${shortedLink}> \nOriginal link er: <${originalLink}>`
+            );
+          }
         })
         .catch(function (error) {
-          message.channel.send(error);
-          console.log(error);
+          return;
         });
     }
 
