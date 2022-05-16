@@ -6,9 +6,16 @@ const url = "https://korterelink.dk/api";
 
 bot.on("ready", () => {
   console.log(`Klienten er startet!`);
-  bot.user.setActivity("Jeg laver dine lange links kortere!", {
-    type: "WATCHING",
-  });
+
+  setInterval(() => {
+    let status = [
+      `Jeg er en bot der kan lave dine links kortere!`,
+      `!hjælp for kommandoer`,
+      `!info for at vide mere om mig`,
+    ];
+    let random = Math.floor(Math.random() * status.length);
+    bot.user.setActivity(status[random], { type: "WATCHING" });
+  }, 3000);
 });
 
 bot.on("message", async (message) => {
@@ -121,6 +128,32 @@ bot.on("message", async (message) => {
     }
 
     checkLink();
+  } else if (command === "hjælp") {
+    let logo = "https://korterelink.dk/static/images/Logo.webp";
+
+    return message.channel.send(
+      new MessageEmbed()
+        .setColor("BLUE")
+        .setTitle("Korterelink bot info")
+        .setThumbnail(logo)
+        .setDescription(
+          "Jeg er en bot der kan forkorte dine links, og checke om de er gyldige.\n\n" +
+            "Kommandoer:\n\n" +
+            "**!forkort <link>** - Forkort link\n" +
+            "**!check <link>** - Check link\n" +
+            "**!info** - Info om boten"
+        )
+    );
+  } else if (command === "info") {
+    message.channel.send(
+      new MessageEmbed()
+        .setColor("BLUE")
+        .setTitle("Korterelink bot info")
+        .setThumbnail("https://korterelink.dk/static/images/Logo.webp")
+        .setDescription(
+          "Jeg er en bot der kan forkorte dine links, og checke om de er gyldige. Jeg er lavet ved hjælp af [Korterelinks API](https://korterelink.dk/api)\n\nJeg har ikke nogen tilknytning til ejeren af korterelink, jeg er bare en bot der lavet til discord, så det er nemere for jer her.\n\nEr du nysgerrig eller en udvikler, så tjek min [GitHub](https://github.com/lassv/korterelink-bot) ud."
+        )
+    );
   }
 });
 
