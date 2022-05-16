@@ -1,0 +1,20 @@
+{
+  "name": "korterelink-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/lassv/korterelink-bot.git",
+  "author": "Lasse Vestergaard",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "discord.js": "12.2.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.1",
+    "nodemon": "^2.0.16"
+  }
+}
