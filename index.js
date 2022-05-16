@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { Client } = require("discord.js");
+const { Client, MessageEmbed } = require("discord.js");
 const bot = new Client({ disableMentions: "everyone" });
 const axios = require("axios");
 const url = "https://korterelink.dk/api";
@@ -27,12 +27,22 @@ bot.on("message", async (message) => {
 
     // Hvis brugeren ikke skriver noget link, så sender vi en error.
     if (!linkArgs) {
-      return message.channel.send("Du skal angive en link");
+      return message.channel.send(
+        new MessageEmbed()
+          .setColor("RED")
+          .setDescription("Du skal skrive et link, som jeg kan forkorte!")
+      );
     }
 
     // Link validation.
     if (!linkArgs.includes("http" || "https")) {
-      return message.channel.send("Du angav ikke et link!");
+      return message.channel.send(
+        new MessageEmbed()
+          .setColor("RED")
+          .setDescription(
+            "Du skal skrive et link som er gyldigt. Prøv med **http://** eller **https://**"
+          )
+      );
     }
 
     async function createLink() {
@@ -41,7 +51,14 @@ bot.on("message", async (message) => {
         .then(function (response) {
           let link = response.data.shortlink;
           return message.channel.send(
-            `Dit link er nu blevet forkortet til: ${link}`
+            new MessageEmbed()
+              .setColor("BLUE")
+              .setTitle("Link forkortet!")
+              .setDescription(
+                `Jeg har nu forkortet **${linkArgs}**, information nedenunder 🥳`
+              )
+              .addField("Original link", `${linkArgs}`, true)
+              .addField("Forkortet link", `${link}`, true)
           );
         })
         .catch(function (error) {
@@ -57,13 +74,23 @@ bot.on("message", async (message) => {
     // Hvis brugeren ikke skriver noget link, så sender vi en error.
     if (!checkArgs) {
       return message.channel.send(
-        "Du skal angive en link til at checke, f.eks <https://ktlk.dk/gxNoTf4>"
+        new MessageEmbed()
+          .setColor("RED")
+          .setDescription(
+            "Du skal angive en link til at checke, f.eks <https://ktlk.dk/gxNoTf4>"
+          )
       );
     }
 
     // Link validation.
     if (!checkArgs.includes("http" || "https")) {
-      return message.channel.send("Du angav ikke et link!");
+      return message.channel.send(
+        new MessageEmbed()
+          .setColor("RED")
+          .setDescription(
+            "Du skal skrive et link som er gyldigt. Prøv med **http://** eller **https://**"
+          )
+      );
     }
 
     async function checkLink() {
@@ -77,7 +104,14 @@ bot.on("message", async (message) => {
             let shortedLink = response.data.shorturl;
 
             return message.channel.send(
-              `Du har angivet: <${checkArgs}> \nForkortet link: <${shortedLink}> \nOriginal link er: <${originalLink}>`
+              new MessageEmbed()
+                .setColor("BLUE")
+                .setTitle("Link checked!")
+                .setDescription(
+                  `Jeg har tjekket linket: **${checkArgs}**, og der var bingo 🥳`
+                )
+                .addField("Original link", `${originalLink}`, true)
+                .addField("Forkortet link", `${shortedLink}`, true)
             );
           }
         })
